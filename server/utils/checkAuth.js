@@ -2,16 +2,16 @@ import jwt from 'jsonwebtoken'
 
 
 export const checkAuth = (req, res, next) => {
-    const token = (req.headers.authrization || '')
+    const token = (req.headers.authorization || '')
         .replace(/Bearer\s?/, '')
 
     if (token) {
         try {
             const decoded = jwt.verify(
                 token,
-                proces.env.JWT_SECRET
-            )
-
+                process.env.JWT_SECRET
+                )
+                
             req.userId = decoded.id
 
             next()

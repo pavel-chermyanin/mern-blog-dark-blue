@@ -10,7 +10,7 @@ router.post('/register', register)
 // Login
 router.post('/login', login)
 // GetMi
-router.get('/me',checkAuth, getMe)
+router.get('/getMe',checkAuth, getMe)
 
 
 export default router
