@@ -34,7 +34,7 @@ export const RegisterPage = () => {
 
   return (
     <form
-      className='w-1/3 h-60 mx-auto mt-40'
+      className='max-w-sm h-60 mx-auto mt-40'
       onSubmit={(e) => e.preventDefault()}
     >
       <h1 className="text-lg text-white text-center">

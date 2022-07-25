@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 import {ToastContainer} from 'react-toastify'
 
 import { Layout } from './components/Layout'
@@ -10,17 +10,25 @@ import { RegisterPage } from './pages/RegisterPage'
 import { LoginPage } from './pages/LoginPage'
 import { EditPostPage } from './pages/EditPostPage'
 import 'react-toastify/dist/ReactToastify.css'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { getMe } from './redux/features/auth/authSlice'
+import { checkIsAuth, getMe } from './redux/features/auth/authSlice'
 
 
 function App() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const token = useSelector(checkIsAuth)
 
   useEffect(() => {
     dispatch(getMe())
+
+    // if (!token) {
+    //   navigate('/login')
+    // }
   },[dispatch])
+
+
   return (
     <Layout>
       <Routes>

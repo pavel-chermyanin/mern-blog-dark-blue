@@ -2,8 +2,10 @@ import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import fileupload from 'express-fileupload'
 
 import authRoute from './routes/auth.js'
+import postsRoute from './routes/posts.js'
 
 
 const app = express()
@@ -19,11 +21,16 @@ const DB_NAME = process.env.DB_NAME
 
 // cors чтобы запускать приложение с разных ip адресов
 app.use(cors())
+// чтобы работать с картинками
+app.use(fileupload())
 // чтобы приложение понимало json
 app.use(express.json())
+// папка с картинками
+app.use(express.static('uploads'))
 
 // Routes
 app.use('/api/auth', authRoute)
+app.use('/api/posts', postsRoute)
 
 
 async function start() {
