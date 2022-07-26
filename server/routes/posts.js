@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createPost, getAll, getById, getMyPosts, removePost } from '../controllers/posts.js'
+import { createPost, getAll, getById, getMyPosts, removePost, updatePost } from '../controllers/posts.js'
 import { checkAuth } from '../utils/checkAuth.js'
 
 
@@ -20,6 +20,9 @@ router.get('/user/me', checkAuth, getMyPosts)
 // remove Post
 // http://localhost:3002/api/posts/:id
 router.delete('/:id', checkAuth, removePost)
+// update Post
+// http://localhost:3002/api/posts/:id
+router.put('/:id', checkAuth, updatePost)
 
 
 

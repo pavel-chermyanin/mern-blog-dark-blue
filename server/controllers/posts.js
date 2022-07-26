@@ -115,13 +115,14 @@ export const getMyPosts = async (req, res) => {
         })
     }
 }
+// remove post
 export const removePost = async (req, res) => {
     try {
         const post = await PostModel.findByIdAndDelete(
             req.params.id
         )
 
-        if(!post) {
+        if (!post) {
             return res.json({
                 message: 'Такого поста не существует'
             })
@@ -130,11 +131,40 @@ export const removePost = async (req, res) => {
         // найдем user по Id из middleware checkAuth
         // и удалим у него пост по id из params
         await UserModel.findByIdAndUpdate(req.userId, {
-            $pull:{posts: req.params.id}
+            $pull: { posts: req.params.id }
         })
         res.json({
             message: 'Пост был удален'
         })
+    } catch (error) {
+        res.json({
+            message: 'Что-то пошло не так'
+        })
+    }
+}
+// update post
+export const updatePost = async (req, res) => {
+    try {
+        const { title, text, id } = req.body
+        const post = await PostModel.findById(id)
+
+        if (req.files) {
+            // создаем уникальное имя
+            let fileName = Date.now().toString() + req.files.image.name
+            // путь к текущей папке
+            const __dirname = dirname(fileURLToPath(import.meta.url))
+            // переносим file в uploads
+            req.files.image.mv(path.join(__dirname, '..', 'uploads', fileName))
+            // переименовываем поле imgUrl
+            post.imgUrl = fileName || ''
+        }
+        // переименуем остальные поля тоже
+        post.title = title
+        post.text = text
+
+        await post.save()
+
+        res.json(post)
     } catch (error) {
         res.json({
             message: 'Что-то пошло не так'
