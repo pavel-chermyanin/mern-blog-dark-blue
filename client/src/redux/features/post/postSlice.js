@@ -4,6 +4,7 @@ import axios from '../../../utils/axios'
 const initialState = {
     posts: [],
     popularPosts: [],
+    myPosts: [],
     loading: false
 }
 
@@ -23,6 +24,17 @@ export const getAllPosts = createAsyncThunk('post/getAllPosts', async () => {
         console.log(error);
     }
 })
+export const getMyPosts = createAsyncThunk('post/getMyPosts', async () => {
+    try {
+        const { data } = await axios.get('/posts/user/me')
+        return data
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
+
 
 export const removePost = createAsyncThunk('post/removePost', async (id) => {
     try {
@@ -37,10 +49,9 @@ export const removePost = createAsyncThunk('post/removePost', async (id) => {
 })
 
 export const updatePost = createAsyncThunk('post/updatePost', async (updatedPost) => {
-    console.log(updatedPost);
     try {
         const { data } = await axios.put(
-            `/posts/${updatedPost.id}`,
+            `/posts`,
             updatedPost
         )
         return data
@@ -76,6 +87,17 @@ export const postSlice = createSlice({
             state.popularPosts = action.payload.popularPosts
         },
         [getAllPosts.rejected]: (state) => {
+            state.loading = false
+        },
+        // Get my posts
+        [getMyPosts.pending]: (state) => {
+            state.loading = true
+        },
+        [getMyPosts.fulfilled]: (state, action) => {
+            state.loading = false
+            state.myPosts = action.payload
+        },
+        [getMyPosts.rejected]: (state) => {
             state.loading = false
         },
         // Remove post

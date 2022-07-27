@@ -1,5 +1,6 @@
 import PostModel from '../models/Post.js'
 import UserModel from '../models/User.js'
+import CommentModel from '../models/Comment.js'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -165,6 +166,26 @@ export const updatePost = async (req, res) => {
         await post.save()
 
         res.json(post)
+    } catch (error) {
+        res.json({
+            message: 'Что-то пошло не так'
+        })
+    }
+}
+
+
+// Get Post Comments
+export const getPostComments = async (req, res) => {
+    try {
+        const post = await PostModel.findById(req.params.id)
+
+        const list = await Promise.all(
+            post.comments.map(comment => {
+                return CommentModel.findById(comment)
+            })
+        )
+
+        res.json(list)
     } catch (error) {
         res.json({
             message: 'Что-то пошло не так'

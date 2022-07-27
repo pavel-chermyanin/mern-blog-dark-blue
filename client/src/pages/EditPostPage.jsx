@@ -14,7 +14,6 @@ export const EditPostPage = () => {
   const params = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  // console.log(params.id,'id');
 
   const fetchPost = useCallback(async () => {
     const { data } = await axios.get(`/posts/${params.id}`)
@@ -31,8 +30,7 @@ export const EditPostPage = () => {
       updatedPost.append('text', text)
       updatedPost.append('id', params.id)
       updatedPost.append('image', newImage)
-      console.log(updatedPost);
-      dispatch(updatePost(updatedPost))
+      await dispatch(updatePost(updatedPost))
       navigate('/posts')
     } catch (error) {
       console.log(error)
@@ -43,7 +41,6 @@ export const EditPostPage = () => {
       setTitle('')
       setText('')
   }
-
 
   useEffect(() => {
     fetchPost()
@@ -105,7 +102,7 @@ export const EditPostPage = () => {
           onClick={submitHandler}
           className='flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4 hover:bg-gray-700'
         >
-          Добавить
+          Изменить
         </button>
         <button
           onClick={clearFormHandler}
